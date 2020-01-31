@@ -1,6 +1,6 @@
 # Login to Amazon ECR Action
 
-See also [Push to Amazon ECR Action](https://github.com/jwalton/gh-ecr-push).
+Originates from [Push to Amazon ECR Action](https://github.com/jwalton/gh-ecr-push).
 
 ## Setup
 
@@ -16,13 +16,16 @@ to your GitHub project:
 ```yaml
 - name: Login to ECR
   id: ecr
-  uses: jwalton/gh-ecr-login@v1
+  uses: ngti/gh-ecr-login@v1
   with:
     access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
     secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-    region: us-east-1
+    region: eu-central-1
 - name: Push to ECR
+  env:
+    REPOSITORY: my-image
+    VERSION: v1
   run: |
-    docker tag my-image ${{ steps.ecr.outputs.account }}.dkr.ecr.us-east-1.amazonaws.com/my-image:v1
-    docker push ${{ steps.ecr.outputs.account }}.dkr.ecr.us-east-1.amazonaws.com/my-image:v1
+    docker tag my-image ${{ steps.ecr.outputs.account }}.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY:$VERSION
+    docker push ${{ steps.ecr.outputs.account }}.dkr.ecr.us-east-1.amazonaws.com/$REPOSITORY:$VERSION
 ```
